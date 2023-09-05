@@ -1,0 +1,5 @@
+altgraph==0.17.3
+f-passwords-generator==1.4.0
+pyinstaller==5.13.2
+pyinstaller-hooks-contrib==2023.8
+pyperclip==1.8.2
