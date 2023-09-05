@@ -2,7 +2,7 @@ import random
 import pyperclip
 
 
-class UserInterface:
+class Interface:
     def display_menu(self):
         print("PassGenCLI - Password Generator")
         print("1. Generate Password")
@@ -33,14 +33,10 @@ class UserInterface:
     def reset_character(self):
         return str(input("Enter the character you want to reset it ot it's default: "))[0]
 
-    def display_result(self, generator, password, matrix):
-        print(f"The Text is:              {generator.plain_text}")
-        print(f"The Key is:               {generator.key_phrase}")
+    def display_result(self, plain_text, key_phrase, password):
+        print(f"The Text is:              {plain_text}")
+        print(f"The Key is:               {key_phrase}")
         print(f"The Ciphered Text is:     {password}")
-        if matrix:
-            print(f"The Matrix used:")
-            for row in matrix:
-                print(" " * 25, row)
 
     def copy_to_clipboard(self, password):
         try:
