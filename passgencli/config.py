@@ -1,10 +1,10 @@
-import configparser
+from configparser import ConfigParser
 import os
 
 
 class Config:
     def __init__(self):
-        self.config = configparser.ConfigParser()
+        self.config = ConfigParser()
         self.file = os.path.expanduser("~/.config/passgencli.conf")
         self._characters_replacements = "Characters Replacements"
 

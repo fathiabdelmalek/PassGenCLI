@@ -20,31 +20,47 @@ def main():
     characters = config.get_settings(config.characters_replacements)
     for key, value in characters.items():
         generator.replace_character(key, value)
-    plain_text = " ".join(args.text) if args.text else ""
-    if plain_text != "":
-        generate_password(interface, generator, plain_text)
-        return
-    while True:
-        print("=" * 64)
-        choice = interface.display_menu()
-        match choice:
-            case 1:
-                plain_text = plain_text if plain_text != "" else interface.get_plain_text()
-                generate_password(interface, generator, plain_text)
-                plain_text = ""
-            case 2:
-                character, replacement = interface.replace_character()
-                generator.replace_character(character, replacement)
-                config.set_setting(config.characters_replacements, character, replacement)
-                config.save_config()
-            case 3:
-                character = interface.reset_character()
-                generator.reset_character(character)
-                config.del_setting(config.characters_replacements, character)
-                config.save_config()
-            case 0:
-                break
-        print("=" * 64)
+    if args.command == 'config':
+        if args.replace:
+            character, replacement = args.replace
+            character = character[0]
+            generator.replace_character(character, replacement)
+            config.set_setting(config.characters_replacements, character, replacement)
+            config.save_config()
+            return
+        if args.reset:
+            character = args.reset[0]
+            character = character[0]
+            generator.reset_character(character)
+            config.del_setting(config.characters_replacements, character)
+            config.save_config()
+            return
+    if args.command == 'generate':
+        plain_text = " ".join(args.text) if args.text else ""
+        if plain_text != "":
+            generate_password(interface, generator, plain_text)
+            return
+        while True:
+            print("=" * 64)
+            choice = interface.display_menu()
+            match choice:
+                case 1:
+                    plain_text = plain_text if plain_text != "" else interface.get_plain_text()
+                    generate_password(interface, generator, plain_text)
+                    plain_text = ""
+                case 2:
+                    character, replacement = interface.replace_character()
+                    generator.replace_character(character, replacement)
+                    config.set_setting(config.characters_replacements, character, replacement)
+                    config.save_config()
+                case 3:
+                    character = interface.reset_character()
+                    generator.reset_character(character)
+                    config.del_setting(config.characters_replacements, character)
+                    config.save_config()
+                case 0:
+                    break
+            print("=" * 64)
 
 
 if __name__ == '__main__':
