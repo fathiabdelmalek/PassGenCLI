@@ -19,11 +19,11 @@ class Interface:
             except ValueError:
                 print("Invalid input. Please enter a number.")
 
-    def get_plain_text(self):
-        plain_text = str(input("Enter plain text: "))
-        return plain_text
+    def get_text(self):
+        text = str(input("Enter plain text: "))
+        return text
 
-    def get_key_phrase(self):
+    def get_key(self):
         key = str(input("Enter the key (or press Enter to skip): "))
         return key if key else ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(random.randint(4, 6)))
 
@@ -33,9 +33,9 @@ class Interface:
     def reset_character(self):
         return str(input("Enter the character you want to reset it ot it's default: "))[0]
 
-    def display_result(self, plain_text, key_phrase, password):
-        print(f"The Text is:              {plain_text}")
-        print(f"The Key is:               {key_phrase}")
+    def display_result(self, text, key, password):
+        print(f"The Text is:              {text}")
+        print(f"The Key is:               {key}")
         print(f"The Ciphered Text is:     {password}")
 
     def copy_to_clipboard(self, password):
