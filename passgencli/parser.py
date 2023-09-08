@@ -1,27 +1,31 @@
 from argparse import ArgumentParser
 
 
-parser = ArgumentParser(prog="pass-gen", description="Strong passwords generator with Playfair cypher algorithm")
-parser.add_argument("-v", "--version", help="Print version information and exit", action="version",
-                    version='%(prog)s 0.3.0')
+class Parser:
+    def __init__(self):
+        self._parser = ArgumentParser(prog="pass-gen",
+                                      description="Strong passwords generator with Playfair cypher algorithm")
+        self._parser.add_argument("-v", "--version", action="version", version='%(prog)s 0.3.0',
+                                  help="Print version information and exit")
 
-subparsers = parser.add_subparsers(title="Subcommands", dest="command", required=True,
-                                   description="Choose a command to generate passwords or configure settings.")
+        sp = self._parser.add_subparsers(title="Subcommands", dest="command",
+                                         description="Choose a command to generate passwords or configure settings.")
 
-generate_parser = subparsers.add_parser("generate", help="Generate passwords from text and key")
-generate_parser.add_argument("-t", "--text", help="The plain text you want to encode", nargs='+')
-generate_parser.add_argument("-k", "--key", help="The key phrase")
-generate_parser.epilog = "Example: pass-gen generate -t 'mytext' -k 'mykey'"
+        generate_parser = sp.add_parser("generate", help="Generate passwords from text and key")
+        generate_parser.add_argument("-t", "--text", nargs='+', help="The plain text you want to encode")
+        generate_parser.add_argument("-k", "--key", help="The key phrase")
+        generate_parser.epilog = "Example: pass-gen generate -t 'my text' -k 'my_key'"
 
-config_parser = subparsers.add_parser("config", help="Configure settings")
-config_parser.add_argument("--replace",
-                           help="Replace one character with a set of characters after cipher", nargs=2,
-                           metavar=('character', 'replacement'))
-config_parser.add_argument("--reset", help="Reset a character to it's default value", nargs=1,
-                           metavar='character')
-config_parser.epilog = (
-    "Examples:\n"
-    "1. Replace a character: pass-gen config --replace e '1@2#'\n"
-    "2. Reset a character: pass-gen config --reset a"
-)
-args = parser.parse_args()
+        config_parser = sp.add_parser("config", help="Configure settings")
+        config_parser.add_argument("--replace", nargs=2, metavar=('character', 'replacement'),
+                                   help="Replace one character with a set of characters after cipher")
+        config_parser.add_argument("--reset", nargs=1, metavar='character',
+                                   help="Reset a character to it's default value")
+        config_parser.epilog = (
+            "Examples:\n"
+            "1. Replace a character: pass-gen config --replace e '1@2#'\n"
+            "2. Reset a character: pass-gen config --reset a"
+        )
+
+    def parse_args(self):
+        return self._parser.parse_args()

@@ -4,36 +4,47 @@ import os
 
 class Config:
     def __init__(self):
-        self.config = ConfigParser()
-        self.file = os.path.expanduser("~/.config/passgencli.conf")
+        if not os.path.exists(os.path.expanduser("~/.config/pass-gen")):
+            os.mkdir(f"{os.path.expanduser('~')}/.config/pass-gen")
+        self._file = os.path.expanduser("~/.config/pass-gen/settings.conf")
         self._characters_replacements = "Characters Replacements"
+        self._history = "History"
+        self._config = ConfigParser()
+
+    @property
+    def config(self):
+        return self._config
 
     @property
     def characters_replacements(self):
         return self._characters_replacements
 
+    @property
+    def history(self):
+        return self._history
+
     def load_config(self):
-        if os.path.exists(self.file):
-            self.config.read(self.file)
+        if os.path.exists(self._file):
+            self._config.read(self._file)
+
+    def save_config(self):
+        with open(self._file, 'w') as configfile:
+            self._config.write(configfile)
 
     def get_setting(self, section, key, default=None):
-        return self.config.get(section, key, fallback=default)
+        return self._config.get(section, key, fallback=default)
 
     def set_setting(self, section, key, value):
-        if not self.config.has_section(section):
-            self.config.add_section(section)
-        self.config.set(section, key, value)
+        if not self._config.has_section(section):
+            self._config.add_section(section)
+        self._config.set(section, key, value)
 
     def del_setting(self, section, key):
-        self.config.remove_option(section, key)
+        self._config.remove_option(section, key)
 
     def get_settings(self, section):
         items = {}
-        if self.config.has_section(section):
-            for key, value in self.config.items(section):
+        if self._config.has_section(section):
+            for key, value in self._config.items(section):
                 items[key] = value
         return items
-
-    def save_config(self):
-        with open(self.file, 'w') as configfile:
-            self.config.write(configfile)

@@ -4,11 +4,14 @@ import pyperclip
 
 class Interface:
     def display_menu(self):
-        print("PassGenCLI - Password Generator")
-        print("1. Generate Password")
-        print("2. Replace a character")
-        print("3. Reset a character replacement do it's default")
-        print("0. Exit")
+        print("""
+PassGenCLI - Password Generator Command Line Tool
+
+1. Generate new password
+2. Replace an alphabet character with a set of custom characters
+3. Reset an alphabet character replacement to it's default
+0. Exit
+        """)
         while True:
             try:
                 choice = int(input("Select an option: "))

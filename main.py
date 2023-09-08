@@ -1,18 +1,21 @@
 #!/bin/python3
 from passgencli.config import Config
+from passgencli.history import History
 from passgencli.generator import Generator
 from passgencli.interface import Interface
-from passgencli.parser import args
+from passgencli.parser import Parser
 
 
 config = Config()
+history = History()
 generator = Generator()
 interface = Interface()
+args = Parser().parse_args()
 
 
-def generate_password(text):
-    key = args.key if args.key else interface.get_key()
+def generate_password(text, key):
     password = generator.generate_password(text, key)
+    history.add_to_history(text, key, password)
     interface.display_result(text, key, password)
     interface.copy_to_clipboard(password)
 
@@ -30,6 +33,7 @@ def reset_character(character):
 
 
 def main():
+    history.load_history()
     config.load_config()
     characters = config.get_settings(config.characters_replacements)
     for key, value in characters.items():
@@ -43,22 +47,19 @@ def main():
             reset_character(character[0])
         return
     if args.command == 'generate':
-        text = " ".join(args.text) if args.text else interface.get_text()
-        generate_password(text)
+        generate_password(" ".join(args.text) if args.text else interface.get_text(),
+                          args.key if args.key else interface.get_key())
         return
     while True:
         print("=" * 64)
         choice = interface.display_menu()
         match choice:
             case 1:
-                text = interface.get_text()
-                generate_password(text)
+                generate_password(interface.get_text(), interface.get_key())
             case 2:
-                character, replacement = interface.replace_character()
-                replace_character(character, replacement)
+                replace_character(*interface.replace_character())
             case 3:
-                character = interface.reset_character()
-                reset_character(character)
+                reset_character(interface.reset_character())
             case 0:
                 break
         print("=" * 64)
