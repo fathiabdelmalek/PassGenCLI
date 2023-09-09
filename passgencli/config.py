@@ -31,16 +31,19 @@ class Config:
         with open(self._file, 'w') as configfile:
             self._config.write(configfile)
 
-    def get_setting(self, section, key, default=None):
+    def get_key(self, section, key, default=None):
         return self._config.get(section, key, fallback=default)
 
-    def set_setting(self, section, key, value):
+    def set_key(self, section, key, value):
         if not self._config.has_section(section):
             self._config.add_section(section)
         self._config.set(section, key, value)
 
-    def del_setting(self, section, key):
+    def del_key(self, section, key):
         self._config.remove_option(section, key)
+
+    def del_section(self, section):
+        self._config.remove_section(section)
 
     def get_settings(self, section):
         items = {}

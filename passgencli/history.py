@@ -38,3 +38,7 @@ class History:
         }
         self._history.append(entry)
         self.save_history()
+
+    def clear_history(self):
+        self._history.clear()
+        self.save_history()

@@ -22,13 +22,13 @@ def generate_password(text, key):
 
 def replace_character(character, replacement):
     generator.replace_character(character, replacement)
-    config.set_setting(config.characters_replacements, character, replacement)
+    config.set_key(config.characters_replacements, character, replacement)
     config.save_config()
 
 
 def reset_character(character):
     generator.reset_character(character)
-    config.del_setting(config.characters_replacements, character)
+    config.del_key(config.characters_replacements, character)
     config.save_config()
 
 
@@ -45,6 +45,8 @@ def main():
         if args.reset:
             character = args.reset[0]
             reset_character(character[0])
+        if args.clear:
+            history.clear_history()
         return
     if args.command == 'generate':
         generate_password(" ".join(args.text) if args.text else interface.get_text(),
@@ -60,6 +62,8 @@ def main():
                 replace_character(*interface.replace_character())
             case 3:
                 reset_character(interface.reset_character())
+            case 4:
+                history.clear_history()
             case 0:
                 break
         print("=" * 64)

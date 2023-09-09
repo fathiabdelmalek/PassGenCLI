@@ -10,6 +10,7 @@ PassGenCLI - Password Generator Command Line Tool
 1. Generate new password
 2. Replace an alphabet character with a set of custom characters
 3. Reset an alphabet character replacement to it's default
+4. Clear history
 0. Exit
         """)
         while True:
