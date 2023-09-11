@@ -6,7 +6,7 @@ import os
 
 class History:
     def __init__(self):
-        self._file = os.path.expanduser("~/.config/pass-gen/history.json")
+        self._file = os.path.expandvars("$XDG_CACHE_HOME/pass-gen/history.json")
         self._history = []
 
     @property

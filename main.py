@@ -1,6 +1,4 @@
 #!/bin/python3
-import os
-
 from passgencli import Config, Generator, History, Interface, Parser
 
 config = Config()
@@ -67,6 +65,9 @@ def main():
 
 
 if __name__ == '__main__':
-    if not os.path.exists(os.path.expanduser("~/.config/pass-gen")):
-        os.mkdir(f"{os.path.expanduser('~')}/.config/pass-gen")
+    import os
+    if not os.path.exists(os.path.expandvars("$XDG_CACHE_HOME/pass-gen")):
+        os.mkdir(f"{os.path.expandvars('$XDG_CACHE_HOME')}/pass-gen")
+    if not os.path.exists(os.path.expandvars("$XDG_CONFIG_HOME/pass-gen")):
+        os.mkdir(f"{os.path.expandvars('$XDG_CONFIG_HOME')}/pass-gen")
     main()

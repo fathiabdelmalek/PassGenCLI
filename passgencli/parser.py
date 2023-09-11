@@ -7,15 +7,12 @@ class Parser:
                                       description="Strong passwords generator with Playfair cypher algorithm")
         self._parser.add_argument("-v", "--version", action="version", version='%(prog)s 0.6.0',
                                   help="Print version information and exit")
-
         sp = self._parser.add_subparsers(title="Subcommands", dest="command",
                                          description="Choose a command to generate passwords or configure settings.")
-
         generate_parser = sp.add_parser("generate", help="Generate passwords from text and key")
         generate_parser.add_argument("-t", "--text", nargs='+', help="The plain text you want to encode")
         generate_parser.add_argument("-k", "--key", help="The key phrase")
         generate_parser.epilog = "Example: pass-gen generate -t 'my text' -k 'my_key'"
-
         config_parser = sp.add_parser("config", help="Configure settings")
         config_parser.add_argument("--replace", nargs=2, metavar=('character', 'replacement'),
                                    help="Replace one character with a set of characters after cipher")
