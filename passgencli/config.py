@@ -4,8 +4,6 @@ import os
 
 class Config:
     def __init__(self):
-        if not os.path.exists(os.path.expanduser("~/.config/pass-gen")):
-            os.mkdir(f"{os.path.expanduser('~')}/.config/pass-gen")
         self._file = os.path.expanduser("~/.config/pass-gen/settings.conf")
         self._characters_replacements = "Characters Replacements"
         self._history = "History"

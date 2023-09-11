@@ -1,14 +1,11 @@
 #!/bin/python3
-from passgencli.config import Config
-from passgencli.history import History
-from passgencli.generator import Generator
-from passgencli.interface import Interface
-from passgencli.parser import Parser
+import os
 
+from passgencli import Config, Generator, History, Interface, Parser
 
 config = Config()
-history = History()
 generator = Generator()
+history = History()
 interface = Interface()
 args = Parser().parse_args()
 
@@ -33,8 +30,8 @@ def reset_character(character):
 
 
 def main():
-    history.load_history()
     config.load_config()
+    history.load_history()
     characters = config.get_settings(config.characters_replacements)
     for key, value in characters.items():
         generator.replace_character(key, value)
@@ -70,4 +67,6 @@ def main():
 
 
 if __name__ == '__main__':
+    if not os.path.exists(os.path.expanduser("~/.config/pass-gen")):
+        os.mkdir(f"{os.path.expanduser('~')}/.config/pass-gen")
     main()

@@ -6,8 +6,6 @@ import os
 
 class History:
     def __init__(self):
-        if not os.path.exists(os.path.expanduser("~/.config/pass-gen")):
-            os.mkdir(f"{os.path.expanduser('~')}/.config/pass-gen")
         self._file = os.path.expanduser("~/.config/pass-gen/history.json")
         self._history = []
 
