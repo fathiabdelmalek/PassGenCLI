@@ -27,12 +27,13 @@ class History:
         with open(self._file, "w") as f:
             json.dump(self._history, f, indent=4)
 
-    def add_to_history(self, text, key, password):
+    def add_to_history(self, text, key, password, context=None):
         entry = {
             "text": text,
             "key": key,
+            "context": context,
             "password": password,
-            "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         }
         self._history.append(entry)
         self.save_history()
@@ -40,3 +41,9 @@ class History:
     def clear_history(self):
         self._history.clear()
         self.save_history()
+
+    def get_password(self, context):
+        for entry in self._history:
+            if entry['context'] == context:
+                return entry
+        return None
