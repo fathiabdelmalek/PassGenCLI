@@ -1,10 +1,20 @@
 #!/bin/python3
-from passgencli import Config, Generator, History, Interface, Parser
+from passgencli import Config, Generator, History, Interface, Logger, Parser
+
+import os
+
+if not os.path.exists(os.path.expandvars("$XDG_CACHE_HOME/pass-gen")):
+    os.mkdir(f"{os.path.expandvars('$XDG_CACHE_HOME')}/pass-gen")
+if not os.path.exists(os.path.expandvars("$XDG_CONFIG_HOME/pass-gen")):
+    os.mkdir(f"{os.path.expandvars('$XDG_CONFIG_HOME')}/pass-gen")
+if not os.path.exists(os.path.expandvars("$XDG_DATA_HOME/pass-gen")):
+    os.mkdir(f"{os.path.expandvars('$XDG_DATA_HOME')}/pass-gen")
 
 config = Config()
 generator = Generator()
 history = History()
 interface = Interface()
+logger = Logger()
 args = Parser().parse_args()
 
 
@@ -12,29 +22,35 @@ def generate_password(text, key):
     password = generator.generate_password(text, key)
     interface.display_result(text, key, password)
     interface.copy_to_clipboard(password)
-    context = interface.save_context()
+    logger.log_info("new password generated")
+    context = interface.get_context_to_save()
     if context:
         history.add_to_history(text, key, password, context)
+        logger.log_info("password saved on history")
 
 
 def get_password(entry):
     if entry:
         interface.display_result(entry['text'], entry['key'], entry['password'])
         interface.copy_to_clipboard(entry['password'])
+        logger.log_info("retrieved saved password")
         return
     interface.display_error(entry)
+    logger.log_error("entered unsaved password context")
 
 
 def replace_character(character, replacement):
     generator.replace_character(character, replacement)
     config.set_key(config.characters_replacements, character, replacement)
     config.save_config()
+    logger.log_info(f"replace character {character} with {replacement}")
 
 
 def reset_character(character):
     generator.reset_character(character)
     config.del_key(config.characters_replacements, character)
     config.save_config()
+    logger.log_info(f"reset character {character} to its default")
 
 
 def main():
@@ -75,18 +91,14 @@ def main():
             case 5:
                 history.clear_history()
             case 0:
-                print("Program exit")
                 break
         print("=" * 64)
 
 
 if __name__ == '__main__':
-    import os
-    if not os.path.exists(os.path.expandvars("$XDG_CACHE_HOME/pass-gen")):
-        os.mkdir(f"{os.path.expandvars('$XDG_CACHE_HOME')}/pass-gen")
-    if not os.path.exists(os.path.expandvars("$XDG_CONFIG_HOME/pass-gen")):
-        os.mkdir(f"{os.path.expandvars('$XDG_CONFIG_HOME')}/pass-gen")
+    interface.display_hello_message()
     try:
         main()
     except KeyboardInterrupt:
-        print("\nProgram exit")
+        print("Keyboard Interrupt")
+    interface.display_exit_message()

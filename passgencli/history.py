@@ -6,7 +6,7 @@ import os
 
 class History:
     def __init__(self):
-        self._file = os.path.expandvars("$XDG_CACHE_HOME/pass-gen/history.json")
+        self._file = os.path.expandvars("$XDG_DATA_HOME/pass-gen/history.json")
         self._history = []
 
     @property
@@ -35,7 +35,15 @@ class History:
             "password": password,
             "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         }
-        self._history.append(entry)
+        existing_entry = None
+        for i, history_entry in enumerate(self._history):
+            if history_entry["context"] == context:
+                existing_entry = i
+                break
+        if existing_entry is not None:
+            self._history[existing_entry] = entry
+        else:
+            self._history.append(entry)
         self.save_history()
 
     def clear_history(self):

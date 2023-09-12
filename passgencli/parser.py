@@ -5,7 +5,7 @@ class Parser:
     def __init__(self):
         self._parser = ArgumentParser(prog="pass-gen",
                                       description="Strong passwords generator with Playfair cypher algorithm")
-        self._parser.add_argument("-v", "--version", action="version", version='%(prog)s 0.7.0',
+        self._parser.add_argument("-v", "--version", action="version", version='%(prog)s 1.0.0',
                                   help="Print version information and exit")
         sp = self._parser.add_subparsers(title="Subcommands", dest="command",
                                          description="Choose a command to generate passwords or configure settings.")
