@@ -5,7 +5,7 @@ class Parser:
     def __init__(self):
         self._parser = ArgumentParser(prog="pass-gen",
                                       description="Strong passwords generator with Playfair cypher algorithm")
-        self._parser.add_argument("-v", "--version", action="version", version='%(prog)s 1.0.0',
+        self._parser.add_argument("-v", "--version", action="version", version='%(prog)s 1.1.0',
                                   help="Print version information and exit")
         sp = self._parser.add_subparsers(title="Subcommands", dest="command",
                                          description="Choose a command to generate passwords or configure settings.")
@@ -13,12 +13,12 @@ class Parser:
         generate_parser = sp.add_parser("generate", help="Generate passwords from text and key")
         generate_parser.add_argument("-t", "--text", nargs='+', help="The plain text you want to encode")
         generate_parser.add_argument("-k", "--key", help="The key phrase")
+        generate_parser.add_argument("-c", "--context", help="The context if you want to save the password on history")
         generate_parser.epilog = "Example: pass-gen generate -t 'my text' -k 'my_key'"
         # get password parser
-        get_parser = sp.add_parser("get", help="Retrieve a saved password by it's context")
-        get_parser.add_argument("context", nargs='+',
-                                help="The context of the saved password")
-        get_parser.epilog = "Example: pass-gen get 'my_context'"
+        get_password_parser = sp.add_parser("get", help="Retrieve a saved password by it's context")
+        get_password_parser.add_argument("context", nargs='+', help="The context of the saved password")
+        get_password_parser.epilog = "Example: pass-gen get 'my_context'"
         # configurations parser
         config_parser = sp.add_parser("config", help="Configure settings")
         config_parser.add_argument("--replace", nargs=2, metavar=('character', 'replacement'),

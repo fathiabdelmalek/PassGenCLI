@@ -5,7 +5,7 @@ from datetime import datetime
 
 class Logger:
     def __init__(self):
-        log_file = os.path.join(os.path.expandvars("$XDG_CACHE_HOME/pass-gen"),
+        log_file = os.path.join(os.path.expanduser("~/.pass-gen"),
                                 f"log_{datetime.now().strftime('%Y-%m-%d')}.log")
         logging.basicConfig(
             level=logging.INFO,
@@ -23,6 +23,3 @@ class Logger:
 
     def log_error(self, message):
         logging.error(message)
-
-    def log_exception(self, message):
-        logging.exception(message)

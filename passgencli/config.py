@@ -5,7 +5,7 @@ import os
 
 class Config:
     def __init__(self):
-        self._file = os.path.expandvars("$XDG_CONFIG_HOME/pass-gen/settings.conf")
+        self._file = os.path.expanduser("~/.pass-gen/config.ini")
         self._characters_replacements = "Characters Replacements"
         self._history = "History"
         self._config = ConfigParser()

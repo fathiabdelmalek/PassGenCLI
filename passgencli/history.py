@@ -6,7 +6,7 @@ import os
 
 class History:
     def __init__(self):
-        self._file = os.path.expandvars("$XDG_DATA_HOME/pass-gen/history.json")
+        self._file = os.path.expanduser("~/.pass-gen/history.json")
         self._history = []
 
     @property
@@ -54,4 +54,4 @@ class History:
         for entry in self._history:
             if entry['context'] == context:
                 return entry
-        return None
+        return context

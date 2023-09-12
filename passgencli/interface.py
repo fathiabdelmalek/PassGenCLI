@@ -51,15 +51,15 @@ class Interface:
         key = str(input("Enter the key (or press Enter to skip): "))
         return key if key else ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(random.randint(4, 6)))
 
-    def get_context(self):
-        return str(input("Enter the context of the saved password: "))
-
     def get_context_to_save(self):
         context = str(input("Enter the context if you want to save the password in history (or press Enter to skip): "))
         return context if context else None
 
     def replace_character(self):
         return str(input("Enter the character you want to replace it: "))[0], str(input("Enter the replacement: "))
+
+    def get_context_to_load(self):
+        return str(input("Enter the context of the saved password: "))
 
     def reset_character(self):
         return str(input("Enter the character you want to reset it ot it's default: "))[0]

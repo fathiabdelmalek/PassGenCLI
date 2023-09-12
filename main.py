@@ -3,12 +3,9 @@ from passgencli import Config, Generator, History, Interface, Logger, Parser
 
 import os
 
-if not os.path.exists(os.path.expandvars("$XDG_CACHE_HOME/pass-gen")):
-    os.mkdir(f"{os.path.expandvars('$XDG_CACHE_HOME')}/pass-gen")
-if not os.path.exists(os.path.expandvars("$XDG_CONFIG_HOME/pass-gen")):
-    os.mkdir(f"{os.path.expandvars('$XDG_CONFIG_HOME')}/pass-gen")
-if not os.path.exists(os.path.expandvars("$XDG_DATA_HOME/pass-gen")):
-    os.mkdir(f"{os.path.expandvars('$XDG_DATA_HOME')}/pass-gen")
+
+if not os.path.exists(os.path.expanduser("~/.pass-gen")):
+    os.mkdir(f"{os.path.expanduser('~')}/.pass-gen")
 
 config = Config()
 generator = Generator()
@@ -18,32 +15,35 @@ logger = Logger()
 args = Parser().parse_args()
 
 
-def generate_password(text, key):
+def generate_password(text, key, context):
     password = generator.generate_password(text, key)
     interface.display_result(text, key, password)
     interface.copy_to_clipboard(password)
     logger.log_info("new password generated")
-    context = interface.get_context_to_save()
     if context:
         history.add_to_history(text, key, password, context)
         logger.log_info("password saved on history")
 
 
-def get_password(entry):
-    if entry:
-        interface.display_result(entry['text'], entry['key'], entry['password'])
-        interface.copy_to_clipboard(entry['password'])
+def get_password(context):
+    try:
+        interface.display_result(context['text'], context['key'], context['password'])
+        interface.copy_to_clipboard(context['password'])
         logger.log_info("retrieved saved password")
-        return
-    interface.display_error(entry)
-    logger.log_error("entered unsaved password context")
+    except TypeError:
+        interface.display_error(context)
+        logger.log_error(f"entered unsaved password context {context}")
 
 
 def replace_character(character, replacement):
-    generator.replace_character(character, replacement)
-    config.set_key(config.characters_replacements, character, replacement)
-    config.save_config()
-    logger.log_info(f"replace character {character} with {replacement}")
+    try:
+        generator.replace_character(character, replacement)
+        config.set_key(config.characters_replacements, character, replacement)
+        config.save_config()
+        logger.log_info(f"replace character {character} with {replacement}")
+    except ValueError:
+        print(f"'{replacement}' is not a valid replacement, you should chose another replacement")
+        logger.log_error(f"failed to set character '{character}' replacement with '{replacement}'")
 
 
 def reset_character(character):
@@ -61,7 +61,8 @@ def main():
         generator.replace_character(key, value)
     if args.command == 'generate':
         generate_password(" ".join(args.text) if args.text else interface.get_text(),
-                          args.key if args.key else interface.get_key())
+                          args.key if args.key else interface.get_key(),
+                          args.context if args.context else interface.get_context_to_save())
         return
     if args.command == 'get':
         get_password(history.get_password(args.context[0]))
@@ -81,9 +82,9 @@ def main():
         choice = interface.display_menu()
         match choice:
             case 1:
-                generate_password(interface.get_text(), interface.get_key())
+                generate_password(interface.get_text(), interface.get_key(), interface.get_context_to_save())
             case 2:
-                get_password(history.get_password(interface.get_context()))
+                get_password(history.get_password(interface.get_context_to_load()))
             case 3:
                 replace_character(*interface.replace_character())
             case 4:
