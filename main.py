@@ -5,7 +5,7 @@ import os
 
 
 if not os.path.exists(os.path.expanduser("~/.pass-gen")):
-    os.mkdir(f"{os.path.expanduser('~')}/.pass-gen")
+    os.makedirs(f"{os.path.expanduser('~')}/.pass-gen")
 
 config = Config()
 generator = Generator()
