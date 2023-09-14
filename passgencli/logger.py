@@ -4,9 +4,8 @@ from datetime import datetime
 
 
 class Logger:
-    def __init__(self):
-        log_file = os.path.join(os.path.expanduser("~/.pass-gen"),
-                                f"log_{datetime.now().strftime('%Y-%m-%d')}.log")
+    def __init__(self, path):
+        log_file = os.path.join(path, f"log_{datetime.now().strftime('%Y-%m-%d')}.log")
         logging.basicConfig(
             level=logging.INFO,
             format="%(asctime)s [%(levelname)s]: %(message)s",

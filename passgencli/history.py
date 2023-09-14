@@ -5,8 +5,8 @@ import os
 
 
 class History:
-    def __init__(self):
-        self._file = os.path.expanduser("~/.pass-gen/history.json")
+    def __init__(self, path):
+        self._file = os.path.join(path, "history.json")
         self._history = []
 
     @property

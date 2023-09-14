@@ -4,8 +4,8 @@ import os
 
 
 class Config:
-    def __init__(self):
-        self._file = os.path.expanduser("~/.pass-gen/config.ini")
+    def __init__(self, path):
+        self._file = os.path.join(path, "config.ini")
         self._characters_replacements = "Characters Replacements"
         self._history = "History"
         self._config = ConfigParser()
