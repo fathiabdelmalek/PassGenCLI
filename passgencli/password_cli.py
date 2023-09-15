@@ -7,13 +7,13 @@ from .parser import Parser
 
 
 class PasswordCLI:
-    def __init__(self, cache_path, config_path, data_path):
+    def __init__(self, cache_path, config_path, data_path, version):
         self._config = Config(config_path)
         self._generator = Generator()
         self._history = History(data_path)
         self._interface = Interface()
         self._logger = Logger(cache_path)
-        self._args = Parser().parse_args()
+        self._args = Parser(version).parse_args()
         self._config.load_config()
         self._history.load_history()
         for key, value in self._config.get_settings(self._config.characters_replacements).items():
