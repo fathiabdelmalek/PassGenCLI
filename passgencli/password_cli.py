@@ -45,7 +45,7 @@ class PasswordCLI:
 
     def generate_password(self, text, key, context):
         password = self._generator.generate_password(text, key)
-        self._interface.display_result(text, key, password)
+        self._interface.display_password(text, key, password)
         self._interface.copy_to_clipboard(password)
         self._logger.log_info("new password generated")
         if context:
@@ -53,22 +53,35 @@ class PasswordCLI:
             self._logger.log_info("password saved on history")
 
     def get_password(self, context):
-        try:
-            self._interface.display_result(context['text'], context['key'], context['password'])
+        entry = self._history.get_password(context)
+        if entry is not None:
+            self._interface.display_password(entry['text'], entry['key'], entry['password'], entry['context'])
             self._interface.copy_to_clipboard(context['password'])
-            self._logger.log_info("retrieved saved password")
-        except TypeError:
-            self._interface.display_error(context)
+            self._logger.log_info("saved password was retrieved")
+            return
+        self._interface.display_context_error_message(context)
+        self._logger.log_error(f"entered unsaved password context {context}")
+
+    def remove_password(self, context):
+        entry = self._history.get_password(context)
+        if self._history.remove_password(context):
+            self._interface.display_password_removed_message()
+            self._interface.display_password(entry['text'], entry['key'], entry['password'], entry['context'])
+            self._logger.log_warning("saved password was remover")
+        else:
+            self._interface.display_context_error_message(context)
             self._logger.log_error(f"entered unsaved password context {context}")
 
     def replace_character(self, character, replacement):
         try:
+            if replacement in ['`', '~', '#', '%', '&', '*' '(', ')', '<', '>', '?', ';', '\'', '"', '|', '\\']:
+                raise ValueError
             self._generator.replace_character(character, replacement)
             self._config.set_key(self._config.characters_replacements, character, replacement)
             self._config.save_config()
             self._logger.log_info(f"replace character {character} with {replacement}")
         except ValueError:
-            print(f"'{replacement}' is not a valid replacement, you should chose another replacement")
+            self._interface.display_replacement_error_message(replacement)
             self._logger.log_error(f"failed to set character '{character}' replacement with '{replacement}'")
 
     def reset_character(self, character):
