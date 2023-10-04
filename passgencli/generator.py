@@ -6,7 +6,9 @@ class Generator:
         self._generator = PasswordGenerator()
         
     def generate_password(self, text, key):
-        return self._generator.generate_password(text, key)
+        self._generator.text = text
+        self._generator.key = key
+        return self._generator.generate_password()
 
     def replace_character(self, character, replacement):
         self._generator.replace_character(character, replacement)
