@@ -3,7 +3,7 @@ from passgencli.password_cli import PasswordCLI
 import os
 import platform
 
-version = "1.4.0"
+version = "1.5.0"
 
 
 def setup_xdg_variables():
