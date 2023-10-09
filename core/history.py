@@ -50,7 +50,14 @@ class History:
         for entry in self._history:
             if entry['context'] == context:
                 return entry
-        return context
+        return None
+
+    def update_password(self, context, text, key, password):
+        for entry in self._history:
+            if entry['context'] == context:
+                entry['text'] = text
+                entry['key'] = key
+                entry['password'] = password
 
     def remove_password(self, context):
         for entry in self._history:

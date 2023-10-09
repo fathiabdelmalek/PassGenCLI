@@ -1,6 +1,6 @@
 altgraph==0.17.3
 cipherspy==0.1.2
-f-passwords-generator==2.0.0
+f-passwords-generator==2.0.1
 pyinstaller==5.13.2
 pyinstaller-hooks-contrib==2023.8
 pyperclip==1.8.2

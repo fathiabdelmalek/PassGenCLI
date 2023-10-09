@@ -56,8 +56,24 @@ class PassGenCLI:
         entry = self._history.get_password(context)
         if entry is not None:
             self._interface.display_password(entry['text'], entry['key'], entry['password'], entry['context'])
-            self._interface.copy_to_clipboard(context['password'])
+            self._interface.copy_to_clipboard(entry['password'])
             self._logger.log_info("saved password was retrieved")
+            return
+        self._interface.display_context_error_message(context)
+        self._logger.log_error(f"entered unsaved password context {context}")
+
+    def update_password(self, context, _text, _key):
+        entry = self._history.get_password(context)
+        if entry is not None:
+            text = _text if _text is not None else entry['text']
+            key = _key if _key is not None else entry['key']
+            password = self._generator.generate_password(text, key)
+            self._interface.display_password(text, key, password)
+            self._interface.copy_to_clipboard(password)
+            self._history.update_password(context, text, key, password)
+            self._logger.log_info("password updated successfully")
+            self._history.save_history()
+            self._logger.log_info("password saved on history")
             return
         self._interface.display_context_error_message(context)
         self._logger.log_error(f"entered unsaved password context {context}")
@@ -89,6 +105,11 @@ class PassGenCLI:
         self._config.del_key(self._config.characters_replacements, character)
         self._config.save_config()
         self._logger.log_info(f"reset character {character} to its default")
+
+    def show_all(self):
+        for password in self._history.history:
+            self._interface.display_password(password['text'], password['key'], password['password'], password['context'])
+            print()
 
 
 __all__ = ['PassGenCLI']

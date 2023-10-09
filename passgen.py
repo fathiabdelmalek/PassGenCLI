@@ -3,7 +3,7 @@ from core import PassGenCLI
 import os
 import platform
 
-version = "0.9.0"
+version = "0.9.1"
 
 
 def setup_xdg_variables():
@@ -61,10 +61,13 @@ def manage_passwords(app):
             case 'generate':
                 app.generate_password(" ".join(app.args.text) if app.args.text else app.interface.get_text(),
                                       app.args.key if app.args.key else app.interface.get_key(),
-                                      " ".join(
-                                          app.args.context) if app.args.context else app.interface.get_context_to_save())
-            case 'get':
-                app.get_password(" ".join(app.args.context))
+                                      " ".join(app.args.context) if app.args.context else app.interface.get_context_to_save())
+            case 'update':
+                app.update_password(" ".join(app.args.context if app.args.context else app.interface.get_context_to_load()),
+                                    " ".join(app.args.text) if app.args.text else app.interface.get_text_to_update(),
+                                    app.args.key if app.args.key else app.interface.get_key(True))
+            case 'remove':
+                app.remove_password(" ".join(app.args.context))
         return
 
 
@@ -80,8 +83,10 @@ def manage_config(app):
 def manage_history(app):
     if app.args.command:
         match app.args.command:
+            case 'get':
+                app.get_password(" ".join(app.args.context))
             case 'show_all':
-                pass
+                app.show_all()
             case 'clear':
                 app.history.clear_history()
         return
@@ -108,13 +113,14 @@ def main(app):
                     case 1:
                         continue
                     case 2:
-                        app.generate_password(app.interface.get_text(), app.interface.get_key(),
+                        app.generate_password(app.interface.get_text(),
+                                              app.interface.get_key(),
                                               app.interface.get_context_to_save())
                     case 3:
-                        app.get_password(app.interface.get_context_to_load())
+                        app.update_password(app.interface.get_context_to_load(),
+                                            app.interface.get_text_to_update(),
+                                            app.interface.get_key(True))
                     case 4:
-                        pass  # update password
-                    case 5:
                         app.remove_password(app.interface.get_context_to_load())
                     case 0:
                         break
@@ -145,12 +151,14 @@ def main(app):
                     case 1:
                         continue
                     case 2:
-                        pass
+                        app.get_password(app.interface.get_context_to_load())
                     case 3:
-                        app.history.clear_history()
+                        app.show_all()
                     case 4:
-                        pass
+                        app.history.clear_history()
                     case 5:
+                        pass
+                    case 6:
                         pass
                     case 0:
                         break

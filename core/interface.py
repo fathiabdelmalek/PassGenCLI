@@ -60,11 +60,10 @@ class Interface:
     def display_passwords_menu(self):
         m = """1. Back
 2. Generate new password
-3. Retrieve saved password from history
-4. Update saved password on history
-5. Remove saved password from history
+3. Update saved password on history
+4. Remove saved password from history
 0. Exit"""
-        r = [0, 1, 2, 3, 4, 5]
+        r = [0, 1, 2, 3, 4]
         return self._display_menu(m, r)
 
     def display_config_menu(self):
@@ -82,18 +81,19 @@ class Interface:
 
     def display_history_menu(self):
         m = """1. Back
-2. Show all passwords
-3. Clear history
-4. Back up history
-5. Load history from a back up
+2. Retrieve saved password from history
+3. Show all saved passwords
+4. Clear history
+5. Back up history into backup file
+6. Load history from a back up from backup file
 0. Exit"""
-        r = [0, 1, 2, 3, 4, 5]
+        r = [0, 1, 2, 3, 4, 5, 6]
         return self._display_menu(m, r)
 
     def display_password(self, text, key, password, context=None):
-        print(f"The Text is:                {text}")
         if context is not None:
             print(f"The context is:             {context}")
+        print(f"The Text is:                {text}")
         print(f"The Key is:                 {key}")
         print(f"The Password is:            {self._MAGENTA}{password}{self._DEFAULT}")
 
@@ -114,9 +114,13 @@ class Interface:
         text = str(input("Enter plain text: "))
         return text
 
-    def get_key(self):
+    def get_text_to_update(self):
+        text = str(input("Enter plain text (or press Enter to skip): "))
+        return text if text else None
+
+    def get_key(self, none: bool = False):
         key = str(input("Enter the key (or press Enter to skip): "))
-        return key if key else ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(random.randint(4, 6)))
+        return key if key else None if none else ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(random.randint(4, 6)))
 
     def get_context_to_save(self):
         context = str(input("Enter the context if you want to save the password in history (or press Enter to skip): "))

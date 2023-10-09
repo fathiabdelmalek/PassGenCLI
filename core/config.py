@@ -7,6 +7,7 @@ class Config:
     def __init__(self, path):
         self._file = os.path.join(path, "config.ini")
         self._characters_replacements = "Characters Replacements"
+        self._encryption_method = "Encryption Method"
         self._history = "History"
         self._config = ConfigParser()
 
@@ -17,6 +18,10 @@ class Config:
     @property
     def characters_replacements(self):
         return self._characters_replacements
+
+    @property
+    def encryption_method(self):
+        return self._encryption_method
 
     @property
     def history(self):
