@@ -3,7 +3,7 @@ from core import PassGenCLI
 import os
 import platform
 
-version = "0.9.1"
+version = "0.10.0"
 
 
 def setup_xdg_variables():
@@ -78,6 +78,10 @@ def manage_config(app):
                 app.replace_character(app.args.character[0][0], str(app.args.replacement[0]))
             case 'reset':
                 app.reset_character(app.args.character[0][0])
+            case 'char_rep':
+                app.show_character_replacement(str(app.args.character[0]))
+            case 'all_reps':
+                app.show_all_characters_replacements()
         return
 
 def manage_history(app):
@@ -86,7 +90,7 @@ def manage_history(app):
             case 'get':
                 app.get_password(" ".join(app.args.context))
             case 'show_all':
-                app.show_all()
+                app.show_all_passwords()
             case 'clear':
                 app.history.clear_history()
         return
@@ -143,6 +147,10 @@ def main(app):
                         pass
                     case 8:
                         pass
+                    case 9:
+                        app.show_character_replacement(app.interface.get_character())
+                    case 10:
+                        app.show_all_characters_replacements()
                     case 0:
                         break
             case 3:
@@ -153,7 +161,7 @@ def main(app):
                     case 2:
                         app.get_password(app.interface.get_context_to_load())
                     case 3:
-                        app.show_all()
+                        app.show_all_passwords()
                     case 4:
                         app.history.clear_history()
                     case 5:

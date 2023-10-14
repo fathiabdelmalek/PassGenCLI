@@ -60,17 +60,26 @@ class Parser:
                                               help="Character to be replaced (should be one character)")
         replace_character_parser.add_argument("replacement", nargs=1,
                                               help="The replacement string (should not contain spaces)")
-        replace_character_parser.epilog = "Example: pass-gen replace e '1@2#"
+        replace_character_parser.epilog = "Example: passgen config replace e '1@2#"
         # reset character parser
         reset_character_parser = self._config_management_subparsers.add_parser("reset",
                                                                          help="Reset a character to it's default value",
                                                                          description="Reset a character to it's default value")
         reset_character_parser.add_argument("character", nargs=1, help="Character to reset it")
-        reset_character_parser.epilog = "Example: passgen reset e"
+        reset_character_parser.epilog = "Example: passgen config reset e"
         # show replacements parser
         self._config_management_subparsers.add_parser("show_replacements",
                                                 help="Show all characters replacements",
                                                 description="Show all characters replacements")
+        # get character replacement parser
+        get_character_replacement_parser = self._config_management_subparsers.add_parser("char_rep",
+                                                                                         help="Show the replacement of a character",
+                                                                                         description="Show the replacement of a character")
+        get_character_replacement_parser.add_argument("character", nargs=1, help="The character to show its replacement (if there is)")
+        # get all characters replacement parser
+        self._config_management_subparsers.add_parser("all_reps",
+                                                      help="Show all characters replacements available",
+                                                      description="Show all characters replacements available")
 
     def _make_history_management_parser(self):
         # get password parser

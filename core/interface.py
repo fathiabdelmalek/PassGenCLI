@@ -58,35 +58,37 @@ class Interface:
         return self._display_menu(m, r)
 
     def display_passwords_menu(self):
-        m = """1. Back
-2. Generate new password
-3. Update saved password on history
-4. Remove saved password from history
-0. Exit"""
+        m = """1.  Back
+2.  Generate new password
+3.  Update saved password on history
+4.  Remove saved password from history
+0.  Exit"""
         r = [0, 1, 2, 3, 4]
         return self._display_menu(m, r)
 
     def display_config_menu(self):
-        m = """1. Back
-2. Replace an alphabet character with a set of custom characters
-3. Reset an alphabet character replacement to it's default
-4. Show all characters replacements
-5. Change encryption method
-6. Reset default encryption method
-7. Encrypt history file
-8. Decrypt history file
-0. Exit"""
-        r = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        m = """1.  Back
+2.  Replace an alphabet character with a set of custom characters
+3.  Reset an alphabet character replacement to it's default
+4.  Show all characters replacements
+5.  Change encryption method
+6.  Reset default encryption method
+7.  Encrypt history file
+8.  Decrypt history file
+9.  Show character replacement
+10. Show all characters replacements
+0.  Exit"""
+        r = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         return self._display_menu(m, r)
 
     def display_history_menu(self):
-        m = """1. Back
-2. Retrieve saved password from history
-3. Show all saved passwords
-4. Clear history
-5. Back up history into backup file
-6. Load history from a back up from backup file
-0. Exit"""
+        m = """1.  Back
+2.  Retrieve saved password from history
+3.  Show all saved passwords
+4.  Clear history
+5.  Back up history into backup file
+6.  Load history from a back up from backup file
+0.  Exit"""
         r = [0, 1, 2, 3, 4, 5, 6]
         return self._display_menu(m, r)
 
@@ -96,6 +98,9 @@ class Interface:
         print(f"The Text is:                {text}")
         print(f"The Key is:                 {key}")
         print(f"The Password is:            {self._MAGENTA}{password}{self._DEFAULT}")
+
+    def display_character_replacement(self, character, replacement):
+        print(f"{character} => {replacement}")
 
     def display_password_removed_message(self):
         print(f"{self.RED}This password was removed from memory, if you want to restore it, regenerate it.{self.DEFAULT}")
@@ -128,6 +133,9 @@ class Interface:
 
     def get_context_to_load(self):
         return str(input("Enter the context of the saved password: "))
+
+    def get_character(self):
+        return str(input("Which character ? "))
 
     def replace_character(self):
         return str(input("Enter the character you want to replace it: "))[0], str(input("Enter the replacement: "))

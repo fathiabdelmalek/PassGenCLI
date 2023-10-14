@@ -106,10 +106,22 @@ class PassGenCLI:
         self._config.save_config()
         self._logger.log_info(f"reset character {character} to its default")
 
-    def show_all(self):
+    def show_all_passwords(self):
         for password in self._history.history:
             self._interface.display_password(password['text'], password['key'], password['password'], password['context'])
             print()
+
+    def show_character_replacement(self, char):
+        rep = self._config.get_key(self._config.characters_replacements, char)
+        if rep is not None:
+            self._interface.display_character_replacement(char, rep)
+
+    def show_all_characters_replacements(self):
+        chars = self._config.get_settings(self._config.characters_replacements)
+        for char, rep in chars.items():
+            self._interface.display_character_replacement(char, rep)
+
+
 
 
 __all__ = ['PassGenCLI']
