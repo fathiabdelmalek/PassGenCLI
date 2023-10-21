@@ -5,7 +5,7 @@ class Parser:
     def __init__(self, version):
         self._parser = ArgumentParser(prog="passgen",
                                       description="Strong passwords generator with Playfair cypher algorithm")
-        self._parser.epilog = "Run pass-gen <command> --help for more information on a command."
+        self._parser.epilog = "Run passgen <command> --help for more information on a command."
         self._parser.add_argument("-v", "--version", action="version", version=f'%(prog)s {version}',
                                   help="Print version information and exit")
         self._sp = self._parser.add_subparsers(title="Sections", dest="section",
@@ -35,7 +35,7 @@ class Parser:
         generate_parser.add_argument("-k", "--key", help="The key phrase")
         generate_parser.add_argument("-c", "--context", nargs='+',
                                      help="The context if you want to save the password on history")
-        generate_parser.epilog = "Example: pass-gen generate -t 'my text' -k 'my_key' -c 'my context'"
+        generate_parser.epilog = "Example: passgen generate -t 'my text' -k 'my_key' -c 'my context'"
         # update password parser
         update_password_parser = self._passwords_management_subparsers.add_parser("update",
                                                                             help="Update saved password with new text",
@@ -49,9 +49,19 @@ class Parser:
                                                                             help="Remove save password from history",
                                                                             description="Remove save password from history")
         remove_password_parser.add_argument("context", nargs='+', help="The context of the saved password")
-        remove_password_parser.epilog = "Example: pass-gen passwords remove 'my context'"
+        remove_password_parser.epilog = "Example: passgen passwords remove 'my context'"
 
     def _make_config_management_parser(self):
+        # change shift parser
+        change_shift_parser = self._config_management_subparsers.add_parser("shift",
+                                                                            help="Change the shift of the encryption",
+                                                                            description="Change the shift of the encryption")
+        change_shift_parser.add_argument("shift", nargs=1, choices=range(1, 26),
+                                         help="The shift number")
+        # reset shift parser
+        self._config_management_subparsers.add_parser("reset_shift",
+                                                      help="Reset the shift to its default values",
+                                                      description="Reset the shift to its default values")
         # replace character parser
         replace_character_parser = self._config_management_subparsers.add_parser("replace",
                                                                            help="Replace one character with a set of characters after cipher",
@@ -62,20 +72,17 @@ class Parser:
                                               help="The replacement string (should not contain spaces)")
         replace_character_parser.epilog = "Example: passgen config replace e '1@2#"
         # reset character parser
-        reset_character_parser = self._config_management_subparsers.add_parser("reset",
+        reset_character_parser = self._config_management_subparsers.add_parser("reset_rep",
                                                                          help="Reset a character to it's default value",
                                                                          description="Reset a character to it's default value")
         reset_character_parser.add_argument("character", nargs=1, help="Character to reset it")
         reset_character_parser.epilog = "Example: passgen config reset e"
-        # show replacements parser
-        self._config_management_subparsers.add_parser("show_replacements",
-                                                help="Show all characters replacements",
-                                                description="Show all characters replacements")
         # get character replacement parser
         get_character_replacement_parser = self._config_management_subparsers.add_parser("char_rep",
                                                                                          help="Show the replacement of a character",
                                                                                          description="Show the replacement of a character")
         get_character_replacement_parser.add_argument("character", nargs=1, help="The character to show its replacement (if there is)")
+        get_character_replacement_parser.epilog = "Example: passgen config char_rep e"
         # get all characters replacement parser
         self._config_management_subparsers.add_parser("all_reps",
                                                       help="Show all characters replacements available",
@@ -87,7 +94,7 @@ class Parser:
                                                                          help="Retrieve a saved password by it's context",
                                                                          description="Retrieve a saved password by it's context")
         get_password_parser.add_argument("context", nargs='+', help="The context of the saved password")
-        get_password_parser.epilog = "Example: pass-gen get 'my context'"
+        get_password_parser.epilog = "Example: passgen get 'my context'"
         # show all passwords parser
         self._history_management_subparsers.add_parser("show_all", help="Show All saved passwords",
                                                  description="Show All saved passwords")

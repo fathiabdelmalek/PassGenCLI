@@ -43,8 +43,8 @@ class PassGenCLI:
     def args(self):
         return self._args
 
-    def generate_password(self, text, key, context):
-        password = self._generator.generate_password(text, key)
+    def generate_password(self, text, key, shift, context):
+        password = self._generator.generate_password(text, key, shift)
         self._interface.display_password(text, key, password)
         self._interface.copy_to_clipboard(password)
         self._logger.log_info("new password generated")
@@ -88,6 +88,12 @@ class PassGenCLI:
             self._interface.display_context_error_message(context)
             self._logger.log_error(f"entered unsaved password context {context}")
 
+    def change_shift(self, shift):
+        self._config.set_key(self._config.encryption_method, 'shift', shift)
+
+    def reset_shift(self):
+        self._config.set_key(self._config.encryption_method, 'shift', 4)
+
     def replace_character(self, character, replacement):
         try:
             if replacement in ['`', '~', '#', '%', '&', '*' '(', ')', '<', '>', '?', ';', '\'', '"', '|', '\\']:
@@ -120,8 +126,6 @@ class PassGenCLI:
         chars = self._config.get_settings(self._config.characters_replacements)
         for char, rep in chars.items():
             self._interface.display_character_replacement(char, rep)
-
-
 
 
 __all__ = ['PassGenCLI']

@@ -7,7 +7,7 @@ import os
 class History:
     def __init__(self, path):
         self._file = os.path.join(path, "history.json")
-        self._history = []
+        self._history = self.load_history()
 
     @property
     def history(self):

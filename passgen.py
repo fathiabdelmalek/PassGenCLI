@@ -3,7 +3,7 @@ from core import PassGenCLI
 import os
 import platform
 
-version = "0.10.0"
+version = "0.11.0"
 
 
 def setup_xdg_variables():
@@ -27,19 +27,19 @@ def setup_xdg_variables():
 def setup_paths(platform_name):
     paths = {
         "Windows": {
-            "cache": os.path.expanduser(os.path.join("~", ".pass-gen")),
-            "config": os.path.expanduser(os.path.join("~", ".pass-gen")),
-            "data": os.path.expanduser(os.path.join("~", ".pass-gen")),
+            "cache": os.path.expanduser(os.path.join("~", ".passgen")),
+            "config": os.path.expanduser(os.path.join("~", ".passgen")),
+            "data": os.path.expanduser(os.path.join("~", ".passgen")),
         },
         "Linux": {
-            "cache": os.path.expandvars(os.path.join("$XDG_CACHE_HOME", "pass-gen")),
-            "config": os.path.expandvars(os.path.join("$XDG_CONFIG_HOME", "pass-gen")),
-            "data": os.path.expandvars(os.path.join("$XDG_DATA_HOME", "pass-gen")),
+            "cache": os.path.expandvars(os.path.join("$XDG_CACHE_HOME", "passgen")),
+            "config": os.path.expandvars(os.path.join("$XDG_CONFIG_HOME", "passgen")),
+            "data": os.path.expandvars(os.path.join("$XDG_DATA_HOME", "passgen")),
         },
         "Darwin": {
-            "cache": os.path.expanduser(os.path.join("~", "Library", "Caches", "pass-gen")),
-            "config": os.path.expanduser(os.path.join("~", "Library", "Application Support", "pass-gen")),
-            "data": os.path.expanduser(os.path.join("~", "Library", "Application Support", "pass-gen")),
+            "cache": os.path.expanduser(os.path.join("~", "Library", "Caches", "passgen")),
+            "config": os.path.expanduser(os.path.join("~", "Library", "Application Support", "passgen")),
+            "data": os.path.expanduser(os.path.join("~", "Library", "Application Support", "passgen")),
         }
     }
 
@@ -61,6 +61,7 @@ def manage_passwords(app):
             case 'generate':
                 app.generate_password(" ".join(app.args.text) if app.args.text else app.interface.get_text(),
                                       app.args.key if app.args.key else app.interface.get_key(),
+                                      app.config.get_key(app.config.encryption_method, 'shift', 5),
                                       " ".join(app.args.context) if app.args.context else app.interface.get_context_to_save())
             case 'update':
                 app.update_password(" ".join(app.args.context if app.args.context else app.interface.get_context_to_load()),
@@ -68,21 +69,24 @@ def manage_passwords(app):
                                     app.args.key if app.args.key else app.interface.get_key(True))
             case 'remove':
                 app.remove_password(" ".join(app.args.context))
-        return
 
 
 def manage_config(app):
     if app.args.command:
         match app.args.command:
+            case 'shift':
+                app.change_shift(app.args.shift[0])
+            case 'reset_shift':
+                app.reset_shift()
             case 'replace':
-                app.replace_character(app.args.character[0][0], str(app.args.replacement[0]))
-            case 'reset':
+                app.replace_character(app.args.character[0][0], app.args.replacement[0])
+            case 'reset_rep':
                 app.reset_character(app.args.character[0][0])
             case 'char_rep':
                 app.show_character_replacement(str(app.args.character[0]))
             case 'all_reps':
                 app.show_all_characters_replacements()
-        return
+
 
 def manage_history(app):
     if app.args.command:
@@ -93,20 +97,9 @@ def manage_history(app):
                 app.show_all_passwords()
             case 'clear':
                 app.history.clear_history()
-        return
 
 
-def main(app):
-    if app.args.section:
-        match app.args.section:
-            case 'passwords':
-                manage_passwords(app)
-            case 'config':
-                manage_config(app)
-            case 'history':
-                manage_history(app)
-        return
-
+def main_loop():
     while True:
         print("=" * 64)
         main_choice = app.interface.display_main_menu()
@@ -119,6 +112,7 @@ def main(app):
                     case 2:
                         app.generate_password(app.interface.get_text(),
                                               app.interface.get_key(),
+                                              app.config.get_key(app.config.encryption_method, 'shift', 5),
                                               app.interface.get_context_to_save())
                     case 3:
                         app.update_password(app.interface.get_context_to_load(),
@@ -134,13 +128,13 @@ def main(app):
                     case 1:
                         continue
                     case 2:
-                        app.replace_character(*app.interface.replace_character())
+                        app.change_shift(app.interface.get_shift())
                     case 3:
-                        app.reset_character(app.interface.reset_character())
+                        app.reset_shift()
                     case 4:
-                        pass
+                        app.replace_character(*app.interface.replace_character())
                     case 5:
-                        pass
+                        app.reset_character(app.interface.reset_character())
                     case 6:
                         pass
                     case 7:
@@ -148,8 +142,12 @@ def main(app):
                     case 8:
                         pass
                     case 9:
-                        app.show_character_replacement(app.interface.get_character())
+                        pass
                     case 10:
+                        pass
+                    case 11:
+                        app.show_character_replacement(app.interface.get_character())
+                    case 12:
                         app.show_all_characters_replacements()
                     case 0:
                         break
@@ -175,10 +173,24 @@ def main(app):
         print("=" * 64)
 
 
+def main(app):
+    if app.args.section:
+        match app.args.section:
+            case 'passwords':
+                manage_passwords(app)
+            case 'config':
+                manage_config(app)
+            case 'history':
+                manage_history(app)
+        return
+    main_loop()
+
+
 if __name__ == '__main__':
     platform_name = platform.system()
-    setup_xdg_variables()
     paths = setup_paths(platform_name)
+    if platform_name == 'Linux':
+        setup_xdg_variables()
     create_dirs(paths)
     app = PassGenCLI(paths["cache"], paths["config"], paths["data"], version)
     characters = app.config.get_settings(app.config.characters_replacements)

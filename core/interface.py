@@ -68,15 +68,17 @@ class Interface:
 
     def display_config_menu(self):
         m = """1.  Back
-2.  Replace an alphabet character with a set of custom characters
-3.  Reset an alphabet character replacement to it's default
-4.  Show all characters replacements
-5.  Change encryption method
-6.  Reset default encryption method
-7.  Encrypt history file
-8.  Decrypt history file
-9.  Show character replacement
-10. Show all characters replacements
+2.  Change the shift of the encryption
+3.  Reset the shift to its default value
+4.  Replace an alphabet character with a set of custom characters
+5.  Reset an alphabet character replacement to it's default
+6.  Show all characters replacements
+7.  Change encryption method
+8.  Reset default encryption method
+9.  Encrypt history file
+10.  Decrypt history file
+11.  Show character replacement
+12. Show all characters replacements
 0.  Exit"""
         r = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         return self._display_menu(m, r)
@@ -110,7 +112,7 @@ class Interface:
 
     def display_replacement_error_message(self, replacement):
         print(f"{self.RED}'{replacement}' is not a valid replacement, you should chose another replacement\n"
-              f"Allowed special character: ('!', '@', '$', '^', '-', '_', '=', '+', ',', '.', '/', ':'){self.DEFAULT}")
+              f"Allowed special character: ('!', '@', '$', '^', '-', '_', '=', '+', '*', ',', '.', '/', ':'){self.DEFAULT}")
 
     def display_exit_message(self):
         print(f"{self._GREEN}Thanks for using it. Bye{self._DEFAULT}")
@@ -126,6 +128,10 @@ class Interface:
     def get_key(self, none: bool = False):
         key = str(input("Enter the key (or press Enter to skip): "))
         return key if key else None if none else ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(random.randint(4, 6)))
+
+    def get_shift(self):
+        shift = str(input("Enter the shift number (between 1 and 25 or press Enter for default value): "))
+        return shift if shift in range(1, 26) else 5
 
     def get_context_to_save(self):
         context = str(input("Enter the context if you want to save the password in history (or press Enter to skip): "))
