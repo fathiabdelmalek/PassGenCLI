@@ -72,13 +72,12 @@ class Interface:
 3.  Reset the shift to its default value
 4.  Replace an alphabet character with a set of custom characters
 5.  Reset an alphabet character replacement to it's default
-6.  Show all characters replacements
-7.  Change encryption method
-8.  Reset default encryption method
-9.  Encrypt history file
-10.  Decrypt history file
-11.  Show character replacement
-12. Show all characters replacements
+6.  Change encryption method
+7.  Reset default encryption method
+8.  Encrypt history file
+9.  Decrypt history file
+10. Show a specific character replacement
+11. Show all characters replacements
 0.  Exit"""
         r = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         return self._display_menu(m, r)
@@ -112,7 +111,7 @@ class Interface:
 
     def display_replacement_error_message(self, replacement):
         print(f"{self.RED}'{replacement}' is not a valid replacement, you should chose another replacement\n"
-              f"Allowed special character: ('!', '@', '$', '^', '-', '_', '=', '+', '*', ',', '.', '/', ':'){self.DEFAULT}")
+              f"Allowed special character: ('!', '@', '$', '^', '-', '_', '=', '+', ',', '.', '/', ':'){self.DEFAULT}")
 
     def display_exit_message(self):
         print(f"{self._GREEN}Thanks for using it. Bye{self._DEFAULT}")

@@ -82,10 +82,16 @@ def manage_config(app):
                 app.replace_character(app.args.character[0][0], app.args.replacement[0])
             case 'reset_rep':
                 app.reset_character(app.args.character[0][0])
+            case '':
+                pass
             case 'char_rep':
                 app.show_character_replacement(str(app.args.character[0]))
             case 'all_reps':
                 app.show_all_characters_replacements()
+# 6.  Change encryption method
+# 7.  Reset default encryption method
+# 8.  Encrypt history file
+# 9.  Decrypt history file
 
 
 def manage_history(app):
@@ -97,6 +103,10 @@ def manage_history(app):
                 app.show_all_passwords()
             case 'clear':
                 app.history.clear_history()
+            case 'save_backup':
+                pass
+            case 'load_backup':
+                pass
 
 
 def main_loop():
@@ -193,9 +203,6 @@ if __name__ == '__main__':
         setup_xdg_variables()
     create_dirs(paths)
     app = PassGenCLI(paths["cache"], paths["config"], paths["data"], version)
-    characters = app.config.get_settings(app.config.characters_replacements)
-    for key, value in characters.items():
-        app.generator.replace_character(key, value)
     app.interface.display_hello_message()
     try:
         main(app)

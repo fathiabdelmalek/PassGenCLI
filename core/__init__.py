@@ -96,7 +96,7 @@ class PassGenCLI:
 
     def replace_character(self, character, replacement):
         try:
-            if replacement in ['`', '~', '#', '%', '&', '*' '(', ')', '<', '>', '?', ';', '\'', '"', '|', '\\']:
+            if replacement in ['`', '~', '#', '%', '&', '*', '(', ')', '<', '>', '?', ';', '\'', '"', '|', '\\']:
                 raise ValueError
             self._generator.replace_character(character, replacement)
             self._config.set_key(self._config.characters_replacements, character, replacement)
@@ -104,7 +104,7 @@ class PassGenCLI:
             self._logger.log_info(f"replace character {character} with {replacement}")
         except ValueError:
             self._interface.display_replacement_error_message(replacement)
-            self._logger.log_error(f"failed to set character '{character}' replacement with '{replacement}'")
+            self._logger.log_error(f"failed to replace character '{character}' with '{replacement}'")
 
     def reset_character(self, character):
         self._generator.reset_character(character)

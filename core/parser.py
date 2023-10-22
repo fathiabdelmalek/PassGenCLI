@@ -6,7 +6,7 @@ class Parser:
         self._parser = ArgumentParser(prog="passgen",
                                       description="Strong passwords generator with Playfair cypher algorithm")
         self._parser.epilog = "Run passgen <command> --help for more information on a command."
-        self._parser.add_argument("-v", "--version", action="version", version=f'%(prog)s {version}',
+        self._parser.add_argument("-v", "--version", action="version", version=f'%(prog)s {version} - Created by Fathi Abdelmalek',
                                   help="Print version information and exit")
         self._sp = self._parser.add_subparsers(title="Sections", dest="section",
                                                description="Choose a command to manage passwords, configure settings, or access history.")
@@ -58,10 +58,11 @@ class Parser:
                                                                             description="Change the shift of the encryption")
         change_shift_parser.add_argument("shift", nargs=1, choices=range(1, 26),
                                          help="The shift number")
+        change_shift_parser.epilog = "Example: passgen config shift 3"
         # reset shift parser
         self._config_management_subparsers.add_parser("reset_shift",
-                                                      help="Reset the shift to its default values",
-                                                      description="Reset the shift to its default values")
+                                                      help="Reset the shift to its default value",
+                                                      description="Reset the shift to its default value")
         # replace character parser
         replace_character_parser = self._config_management_subparsers.add_parser("replace",
                                                                            help="Replace one character with a set of characters after cipher",
