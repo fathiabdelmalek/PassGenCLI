@@ -17,11 +17,11 @@ class Parser:
         # config
         config_manager_parser = self._sp.add_parser("config", help="Manage program configurations.")
         self._config_management_subparsers = config_manager_parser.add_subparsers(title="Configurations Management Commands",
-                                                                            dest="command")
+                                                                                  dest="command")
         # history
         history_manager_parser = self._sp.add_parser("history", help="Access history.")
         self._history_management_subparsers = history_manager_parser.add_subparsers(title="History Management Commands",
-                                                                              dest="command")
+                                                                                    dest="command")
         self._make_passwords_management_parser()
         self._make_config_management_parser()
         self._make_history_management_parser()
@@ -78,6 +78,7 @@ class Parser:
                                                                          description="Reset a character to it's default value")
         reset_character_parser.add_argument("character", nargs=1, help="Character to reset it")
         reset_character_parser.epilog = "Example: passgen config reset e"
+        #
         # get character replacement parser
         get_character_replacement_parser = self._config_management_subparsers.add_parser("char_rep",
                                                                                          help="Show the replacement of a character",
@@ -112,6 +113,8 @@ class Parser:
                                                                                   help="Retrieve history from backup file",
                                                                                   description="Retrieve history from backup file")
         load_backup_history_parser.add_argument("file", nargs=1, help="The backup file name to get data from")
+        # encrypt history parser
+        # decrypt history parser
 
     def parse_args(self) -> Namespace:
         return self._parser.parse_args()

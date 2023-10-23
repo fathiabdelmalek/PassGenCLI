@@ -82,16 +82,10 @@ def manage_config(app):
                 app.replace_character(app.args.character[0][0], app.args.replacement[0])
             case 'reset_rep':
                 app.reset_character(app.args.character[0][0])
-            case '':
-                pass
             case 'char_rep':
                 app.show_character_replacement(str(app.args.character[0]))
             case 'all_reps':
                 app.show_all_characters_replacements()
-# 6.  Change encryption method
-# 7.  Reset default encryption method
-# 8.  Encrypt history file
-# 9.  Decrypt history file
 
 
 def manage_history(app):
@@ -106,6 +100,10 @@ def manage_history(app):
             case 'save_backup':
                 pass
             case 'load_backup':
+                pass
+            case 'encrypt':
+                pass
+            case 'decrypt':
                 pass
 
 
@@ -146,18 +144,8 @@ def main_loop():
                     case 5:
                         app.reset_character(app.interface.reset_character())
                     case 6:
-                        pass
-                    case 7:
-                        pass
-                    case 8:
-                        pass
-                    case 9:
-                        pass
-                    case 10:
-                        pass
-                    case 11:
                         app.show_character_replacement(app.interface.get_character())
-                    case 12:
+                    case 7:
                         app.show_all_characters_replacements()
                     case 0:
                         break
@@ -173,9 +161,13 @@ def main_loop():
                     case 4:
                         app.history.clear_history()
                     case 5:
-                        pass
+                        continue
                     case 6:
-                        pass
+                        continue
+                    case 7:
+                        continue
+                    case 8:
+                        continue
                     case 0:
                         break
             case 0:

@@ -72,12 +72,8 @@ class Interface:
 3.  Reset the shift to its default value
 4.  Replace an alphabet character with a set of custom characters
 5.  Reset an alphabet character replacement to it's default
-6.  Change encryption method
-7.  Reset default encryption method
-8.  Encrypt history file
-9.  Decrypt history file
-10. Show a specific character replacement
-11. Show all characters replacements
+6.  Show a specific character replacement
+7.  Show all characters replacements
 0.  Exit"""
         r = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         return self._display_menu(m, r)
@@ -89,6 +85,8 @@ class Interface:
 4.  Clear history
 5.  Back up history into backup file
 6.  Load history from a back up from backup file
+7.  Encrypt passwords on history file
+8.  Decrypt passwords on history file
 0.  Exit"""
         r = [0, 1, 2, 3, 4, 5, 6]
         return self._display_menu(m, r)
